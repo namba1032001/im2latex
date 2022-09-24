@@ -24,7 +24,7 @@ def main():
     parser.add_argument("--dec_rnn_h", type=int, default=512,
                         help="The hidden state of the decoder RNN")
     parser.add_argument("--data_path", type=str,
-                        default="./data/", help="The dataset's dir")
+                        default="./input/data-image/", help="The dataset's dir")
     parser.add_argument("--add_position_features", action='store_true',
                         default=False, help="Use position embeddings or not")
     # training args
