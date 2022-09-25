@@ -37,9 +37,9 @@ def preprocess(data_dir, split):
             pair = (img_tensor, formula)
             # print(type(img_tensor))
             pairs.append(pair)
-            if((split == "train") & (i == 30000)):
+            if((split == "train") & (i == 10000)):
                 break;
-            elif(((split == "validate") | (split == "test")) & (i == 5000)):
+            elif(((split == "validate") | (split == "test")) & (i == 1000)):
                 break;
             i+=1
 

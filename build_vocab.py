@@ -71,6 +71,6 @@ def load_vocab(data_dir):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Building vocab for Im2Latex")
     parser.add_argument("--data_path", type=str,
-                        default="../input/data-image/", help="The dataset's dir")
+                        default="./data/", help="The dataset's dir")
     args = parser.parse_args()
     vocab = build_vocab(args.data_path)
