@@ -1,4 +1,5 @@
 import os
+import wandb
 from os.path import join
 
 import torch
@@ -25,6 +26,21 @@ class Trainer(object):
         self.last_epoch = last_epoch
         self.best_val_loss = 1e18
         self.device = torch.device("cuda" if use_cuda else "cpu")
+        
+        wandb.init(project="Image to LaTex", entity="gr7-cviuh")
+        wandb.config = {
+            "learning_rate": self.args.lr,
+            "min_learning_rate": self.args.min_lr,
+            "epochs": self.args.epoches,
+            "batch_size": self.args.batch_size,
+            "embeding_size": self.args.emb_dim,
+            "max_length_of_formula": self.args.max_len,
+            "dropout_probility": self.args.dropout,
+            "dec_rnn_h": self.args.dec_rnn_h,
+            "save_dir": self.args.save_dir,
+            "seed": self.args.seed,
+            "print_freq": self.args.print_freq
+        }
 
     def train(self):
         mes = "Epoch {}, step:{}/{} {:.2f}%, Loss:{:.4f}, Perplexity:{:.4f}"
@@ -45,6 +61,11 @@ class Trainer(object):
                         avg_loss,
                         2**avg_loss
                     ))
+                    wandb.log({
+                        "epoch": self.epoch,
+                        "train_loss": avg_loss,
+                        "train_perplexity": 2**avg_loss,
+                    })
                     losses = 0.0
 
             # one epoch Finished, calcute val loss
@@ -94,6 +115,11 @@ class Trainer(object):
             print(mes.format(
                 self.epoch, avg_loss, 2**avg_loss
             ))
+            wandb.log({
+                "epoch": self.epoch,
+                "val_loss": avg_loss,
+                "val_perplexity": 2**avg_loss,
+            })
         if avg_loss < self.best_val_loss:
             self.best_val_loss = avg_loss
             self.save_model('best_ckpt')

@@ -38,14 +38,15 @@ def main():
 
     args = parser.parse_args()
 
-    # 加载 模型
-    checkpoint = torch.load(join(args.model_path))
-    model_args = checkpoint['args']
 
     # 读入词典,设置其他相关参数
     vocab = load_vocab(args.data_path)
     use_cuda = True if args.cuda and torch.cuda.is_available() else False
-
+    
+    # 加载 模型
+    checkpoint = torch.load(join(args.model_path), map_location=torch.device("cuda" if use_cuda else "cpu"))
+    model_args = checkpoint['args']
+    
     # 加载测试集
     data_loader = DataLoader(
         Im2LatexDataset(args.data_path, args.split, args.max_len),
