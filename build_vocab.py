@@ -42,18 +42,19 @@ def build_vocab(data_dir, min_count=10):
         formulas = [formula.strip('\n') for formula in f.readlines()]
 
     with open(join(data_dir, 'im2latex_train_filter.lst'), 'r') as f:
-        i = 0
         for line in f:
             idx,_, basic = line.strip('\n').split()
             idx = int(idx)
             formula = formulas[idx].split()
             counter.update(formula)
-            if i == 30000:
-                break
-            i+=1
+    # with open(join(data_dir, 'train.formulas.norm.txt'), 'r') as f:
+    #     for line in f:
+    #         formula = line.split()
+    #         counter.update(formula)
 
     for word, count in counter.most_common():
         if count >= min_count:
+            print(word)
             vocab.add_sign(word)
     vocab_file = join(data_dir, 'vocab.pkl')
     print("Writing Vocab File in ", vocab_file)
